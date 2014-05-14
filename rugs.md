@@ -11,13 +11,12 @@ transition: rotate
 
 Download the data
 ========================================================
-
-meetup.com -> RUGS - > more - > stats
-
+- meetup.com -> RUGS - > more - > stats
+- Currently only viewable by Organisers
 ![Membership Data](membershipdata.png)
 
 
-Read the data from
+Read the data from CSV
 ========================================================
 
 
@@ -166,6 +165,7 @@ length(which(beginner))
 
 The code and presentation can be found at
 ========================================================
+- http://bit.ly/T1nOot
 
 
 Introduction to R & Data Science
