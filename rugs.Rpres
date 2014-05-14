@@ -1,0 +1,133 @@
+<style type="text/css">
+.small-code pre code {
+   font-size: 1.1em;
+}
+</style>
+
+RUGS membership
+========================================================
+author: Dai ZJ
+
+Download the data
+========================================================
+
+meetup.com -> RUGS - > more - > stats
+
+![Membership Data](membershipdata.png)
+
+
+Read the data from
+========================================================
+
+```{r}
+# none of the read from Excel packages worked
+# so I converted the Excela file as a csv
+
+file.name <- "R_User_Group_-_Singapore_(RUGS)_Total_and_Active_Members.csv"
+
+rugs1 <- read.csv(file.name)
+
+rugs1 <- rugs1[c("Date","Total.Members","Active.Members")]
+
+head(rugs1)
+```
+
+The data
+========================================================
+
+```{r}
+# The data has 3 columns
+head(rugs1)
+```
+
+Metric: Engagement
+========================================================
+Define
+- Engagement = Active.Members / Total.Members
+
+```{r}
+rugs1$engagement <- with(rugs1,Active.Members / Total.Members)
+```
+
+Metric: Engagement - plot
+========================================================
+
+```{r, echo=FALSE}
+plot(rugs1$engagement)
+```
+
+Metric: Engagement - Summarise by month
+========================================================
+Firstly Create the month variable
+```{r}
+tmp.date <- as.Date(rugs1$Date)
+rugs1$yyyy_mm <- format(tmp.date, "%Y-%m")
+head(rugs1$yyyy_mm)
+```
+
+Metric: Engagement - Summarise by month
+========================================================
+```{r}
+# dplyr from Hadley
+# you can use the %.% notation
+require(dplyr)
+rugs1.summ <- rugs1 %.% 
+  group_by(yyyy_mm) %.% 
+  summarise(avg_em = mean(engagement),
+            avg_am = mean(Active.Members),
+            avg_tot = mean(Total.Members))
+
+head(rugs1.summ)
+```
+
+Metric: Engagement - Summarise by month
+========================================================
+```{r,echo=FALSE}
+plot(rugs1.summ$avg_em)
+lines(lowess(rugs1.summ$avg_em))
+```
+
+Metric: Engagement - Avg Engagement by Month Last 2 years
+========================================================
+```{r,echo=FALSE}
+a <- rugs1.summ %.% filter(yyyy_mm >= "2012-05") %.% select(avg_em)
+plot(a$avg_em,type= "b")
+lines(lowess(a$avg_em))
+```
+
+Metric: Engagement - Avg Engagement by Month Last 3 years
+========================================================
+```{r,echo=FALSE}
+a <- rugs1.summ %.% filter(yyyy_mm >= "2011-05") %.% select(avg_em)
+plot(a$avg_em,type= "b")
+lines(lowess(a$avg_em))
+```
+
+How to improve engagement?
+========================================================
+* Workshops
+  * free workshops
+  * pRemium workshops (paid for)
+* Your ideas please
+
+Number of BeginneRs
+========================================================
+
+```{r}
+# firstly downloaded the list of members
+mem.list <- read.csv("member_list.csv")
+
+expri <- 
+  mem.list$What.s.your.experience.in.R
+
+expri <- tolower(expri)
+
+require(stringr) # strings operation
+keywords <- c("beginner","novice","new")
+
+beginner <- FALSE
+for(k in keywords) {
+  beginner <- beginner | str_detect(expri,k)
+}
+length(which(beginner))
+```
