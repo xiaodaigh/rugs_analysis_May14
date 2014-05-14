@@ -7,6 +7,7 @@
 RUGS membership
 ========================================================
 author: Dai ZJ
+transition: rotate
 
 Download the data
 ========================================================
@@ -29,18 +30,6 @@ file.name <- "R_User_Group_-_Singapore_(RUGS)_Total_and_Active_Members.csv"
 rugs1 <- read.csv(file.name)
 
 rugs1 <- rugs1[c("Date","Total.Members","Active.Members")]
-
-head(rugs1)
-```
-
-```
-         Date Total.Members Active.Members
-1 2010-07-27              4              4
-2 2010-07-28              4              4
-3 2010-07-29              5              5
-4 2010-07-30              5              5
-5 2010-07-31              7              7
-6 2010-08-01              8              8
 ```
 
 
